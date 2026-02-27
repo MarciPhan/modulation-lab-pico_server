@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Modulation Lab 2.4+</title>
+    <script src="./plotly-basic.min.js"></script>
+  <script type="module" crossorigin src="./assets/index-WdWcdlvL.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-USrcme55.css">
+</head>
+
+<body>
+    <div id="mobile-nav">
+        <span>Digital Modulation Lab</span>
+        <button id="menu-toggle">☰</button>
+    </div>
+    <div class="scanline"></div>
+    <div id="focus-overlay" class="hidden">
+        <button id="focus-close" title="Close Focus View">✕</button>
+        <div id="focus-plot-container"></div>
+    </div>
+    <div id="app">
+        <aside class="controls">
+            <div class="lab-header">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h1 data-i18n="header_title">Modulation Lab</h1>
+                    <div style="display:flex; gap: 4px;">
+                        <button id="lang-toggle" title="Toggle Language CZ/EN"
+                            style="padding:2px 5px; font-size:0.7rem; font-weight:bold; border: 1px solid var(--border-main); border-radius:3px; background:var(--bg-main); color:var(--text-primary);">CZ</button>
+                        <button id="theme-toggle" title="Toggle Light/Dark Mode"
+                            style="padding:2px 5px; font-size:0.8rem;">🌓</button>
+                    </div>
+                </div>
+                <small data-i18n="header_status">System Status: SIGNAL LOCK v4.0</small>
+            </div>
+
+            <div class="control-group">
+                <label data-i18n="lbl_modulation">Modulation Path</label>
+                <select id="mod-type">
+                    <!-- Options will be dynamically populated from registry -->
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label style="display:flex; align-items:center; gap:8px;">
+                    <span style="display:flex;align-items:center;"><span data-i18n="lbl_random_data">Random Data</span>
+                        <span class="info-icon" data-i18n-tooltip="tt_random_data" data-tooltip="...">?</span></span>
+                    <input type="checkbox" id="random-data" checked>
+                    <button id="regen-data" data-i18n="btn_regen"
+                        style="background:none; border:1px solid var(--terminal-green); color:var(--terminal-green); font-size:0.6rem; cursor:pointer; padding:2px 4px;">Regen</button>
+                </label>
+            </div>
+
+            <div class="control-group param-std">
+                <label>
+                    <span style="display:flex;align-items:center;"><span data-i18n="lbl_order">Order [M]</span> <span
+                            class="info-icon" data-i18n-tooltip="tt_order" data-tooltip="...">?</span></span>
+                    <input type="number" id="m-in" value="6">
+                </label>
+                <input type="range" id="m-order" min="1" max="10" step="1" value="6">
+            </div>
+
+            <div class="control-group">
+                <label>
+                    <span style="display:flex;align-items:center;"><span data-i18n="lbl_carrier">Carrier [fc] kHz</span>
+                        <span class="info-icon" data-i18n-tooltip="tt_carrier" data-tooltip="...">?</span></span>
+                    <input type="number" id="fc-in" value="50">
+                </label>
+                <input type="range" id="fc" min="1" max="5000" step="1" value="50">
+            </div>
+
+            <div class="control-group">
+                <label>
+                    <span style="display:flex;align-items:center;"><span data-i18n="lbl_bitrate">Bit Rate [Rb]
+                            kbps</span> <span class="info-icon" data-i18n-tooltip="tt_bitrate"
+                            data-tooltip="...">?</span></span>
+                    <input type="number" id="rb-in" value="10">
+                </label>
+                <input type="range" id="rb" min="0.1" max="1000" step="0.1" value="10">
+            </div>
+
+            <div class="control-group param-alpha">
+                <label>
+                    <span style="display:flex;align-items:center;"><span data-i18n="lbl_pulse">Pulse α</span> <span
+                            class="info-icon" data-i18n-tooltip="tt_pulse" data-tooltip="...">?</span></span>
+                    <input type="number" id="rolloff-in" value="0.35" step="0.01">
+                </label>
+                <input type="range" id="rolloff" min="0" max="1" step="0.01" value="0.35">
+            </div>
+
+            <div class="control-group param-sf" style="display:none">
+                <label>
+                    <span style="display:flex;align-items:center;"><span data-i18n="lbl_sf">LoRa SF</span> <span
+                            class="info-icon" data-i18n-tooltip="tt_sf" data-tooltip="...">?</span></span>
+                    <input type="number" id="sf-in" value="8">
+                </label>
+                <input type="range" id="sf" min="5" max="16" step="1" value="8">
+            </div>
+
+            <div class="control-group param-bw" style="display:none">
+                <label>
+                    <span style="display:flex;align-items:center;"><span data-i18n="lbl_bw">Bandwidth [BW] kHz</span>
+                        <span class="info-icon" data-i18n-tooltip="tt_bw" data-tooltip="...">?</span></span>
+                    <input type="number" id="bw-in" value="125">
+                </label>
+                <input type="range" id="bw" min="1" max="1000" step="1" value="125">
+            </div>
+
+            <div class="control-group param-l" style="display:none">
+                <label>
+                    <span style="display:flex;align-items:center;"><span data-i18n="lbl_chips">Chips [L]</span> <span
+                            class="info-icon" data-i18n-tooltip="tt_chips" data-tooltip="...">?</span></span>
+                    <input type="number" id="l-in" value="31">
+                </label>
+                <input type="range" id="l-chips" min="1" max="1023" step="1" value="31">
+            </div>
+
+            <div class="control-group param-slots" style="display:none">
+                <label>
+                    <span style="display:flex;align-items:center;"><span data-i18n="lbl_slots">TH Slots</span> <span
+                            class="info-icon" data-i18n-tooltip="tt_slots" data-tooltip="...">?</span></span>
+                    <input type="number" id="slots-in" value="8">
+                </label>
+                <input type="range" id="th-slots" min="1" max="128" step="1" value="8">
+            </div>
+
+            <div class="control-group param-rh" style="display:none">
+                <label>
+                    <span style="display:flex;align-items:center;"><span data-i18n="lbl_hop">Hop [Rh] s⁻¹</span> <span
+                            class="info-icon" data-i18n-tooltip="tt_hop" data-tooltip="...">?</span></span>
+                    <input type="number" id="rh-in" value="1000">
+                </label>
+                <input type="range" id="rh" min="1" max="10000" step="10" value="1000">
+            </div>
+
+            <div class="lab-divider" data-i18n="divider_legend">LEGEND / HELP</div>
+            <div id="help-panel" class="help-panel" data-i18n="help_initial">
+                Select modulation to see details.
+            </div>
+
+            <div class="lab-divider" data-i18n="divider_engine">ENGINE SETTINGS</div>
+
+            <div class="control-group">
+                <label>
+                    <span style="display:flex;align-items:center;"><span data-i18n="lbl_samples">Samples/Sym</span>
+                        <span class="info-icon" data-i18n-tooltip="tt_samples" data-tooltip="...">?</span></span>
+                    <input type="number" id="sps-in" value="32">
+                </label>
+                <input type="range" id="sps" min="4" max="128" step="2" value="32">
+            </div>
+
+            <div class="control-group">
+                <label>
+                    <span style="display:flex;align-items:center;"><span data-i18n="lbl_symbol_count">Symbol
+                            Count</span> <span class="info-icon" data-i18n-tooltip="tt_symbol_count"
+                            data-tooltip="...">?</span></span>
+                    <input type="number" id="nc-in" value="30">
+                </label>
+                <input type="range" id="nc" min="1" max="200" step="1" value="30">
+            </div>
+
+            <div class="control-group">
+                <button id="show-help-btn" class="btn-main btn-guide">
+                    <span class="emoji">ℹ️</span> <span data-i18n="btn_guide">PRŮVODCE APLIKACÍ</span>
+                </button>
+                <button id="pres-toggle" class="btn-main btn-pres">
+                    <span class="emoji">📽️</span> <span data-i18n="btn_presentation">PRESENTATION MODE</span>
+                </button>
+            </div>
+
+            <div style="margin-top:auto; font-size: 0.65rem; opacity: 0.5;">
+                VCO LOCK: ACTIVE<br>
+                SAMPLING: USER DEFINED<br>
+                ENGINE: V-DSP v2.5 (Signal Lock)
+            </div>
+        </aside>
+
+        <main class="display">
+            <div class="charts-stack">
+                <div class="chart-panel">
+                    <div class="panel-title">
+                        <span style="display:flex;align-items:center;gap:8px;"><span data-i18n="chart_1_title">1) Source
+                                Data (Bits)</span>
+                            <span class="info-icon" data-i18n-tooltip="chart_1_tt" data-tooltip="...">?</span>
+                        </span>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <span id="info-1" class="chart-info"></span>
+                            <button class="focus-btn" data-plot="plot-1" title="Focus View">⛶</button>
+                        </div>
+                    </div>
+                    <div id="plot-1" class="chart-box"></div>
+                </div>
+                <div class="chart-panel">
+                    <div class="panel-title">
+                        <span style="display:flex;align-items:center;gap:8px;"><span id="title-2-text">2) Mapping /
+                                Code</span>
+                            <span class="info-icon" data-i18n-tooltip="chart_2_tt" data-tooltip="...">?</span>
+                        </span>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <span id="info-2" class="chart-info"></span>
+                            <button class="focus-btn" data-plot="plot-2" title="Focus View">⛶</button>
+                        </div>
+                    </div>
+                    <div id="plot-2" class="chart-box"></div>
+                </div>
+                <div class="chart-panel">
+                    <div class="panel-title">
+                        <span style="display:flex;align-items:center;gap:8px;"><span id="title-3-text">3) Baseband
+                                Domain</span>
+                            <span class="info-icon" data-i18n-tooltip="chart_3_tt" data-tooltip="...">?</span>
+                        </span>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <span id="info-3" class="chart-info"></span>
+                            <button class="focus-btn" data-plot="plot-3" title="Focus View">⛶</button>
+                        </div>
+                    </div>
+                    <div id="plot-3" class="chart-box"></div>
+                </div>
+                <div class="chart-panel">
+                    <div class="panel-title">
+                        <span style="display:flex;align-items:center;gap:8px;"><span id="title-4-text">4) Technical
+                                Analysis / Constellation</span>
+                            <span class="info-icon" data-i18n-tooltip="chart_4_tt" data-tooltip="...">?</span>
+                        </span>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <span id="info-4" class="chart-info"></span>
+                            <button class="focus-btn" data-plot="plot-4" title="Focus Analysis">⛶</button>
+                            <button class="focus-btn" data-plot="plot-const" title="Focus Constellation">💠</button>
+                        </div>
+                    </div>
+                    <div class="dual-panel">
+                        <div id="plot-4" style="flex:2"></div>
+                        <div id="plot-const" style="flex:1; border-left: 1px solid var(--panel-border)"></div>
+                    </div>
+                </div>
+                <div class="chart-panel large">
+                    <div class="panel-title">
+                        <span style="display:flex;align-items:center;gap:8px;"><span data-i18n="chart_5_title">5) RF
+                                Channel Output</span>
+                            <span class="info-icon" data-i18n-tooltip="chart_5_tt" data-tooltip="...">?</span>
+                        </span>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <span id="info-5" class="chart-info"></span>
+                            <button class="focus-btn" data-plot="plot-5" title="Focus View">⛶</button>
+                        </div>
+                    </div>
+                    <div id="plot-5" class="chart-box"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Welcome Modal / Průvodce -->
+    <div id="welcome-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2 style="display:flex; align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="tul-icon">
+                    <path
+                        d="M21.42 10.922a2 2 0 0 1-.019 3.838L12.83 19.818a2 2 0 0 1-1.66 0L2.6 14.76a2 2 0 0 1-.02-3.84L12 6l9.42 4.922Z" />
+                    <path d="M14 14.5c0 1.5-1.12 3-2 3s-2-1.5-2-3" />
+                    <path d="M22 10v6" />
+                </svg>Vítejte v Modulation Lab 3.0</h2>
+            <p style="margin-top: 5px; opacity: 0.9;">Tato aplikace slouží k interaktivnímu pochopení principů fungování
+                digitálních rádiových modulací pro studenty.</p>
+
+            <div class="modal-section">
+                <h3 style="display:flex; align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                        height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="tul-icon">
+                        <line x1="21" x2="14" y1="4" y2="4" />
+                        <line x1="10" x2="3" y1="4" y2="4" />
+                        <line x1="21" x2="12" y1="12" y2="12" />
+                        <line x1="8" x2="3" y1="12" y2="12" />
+                        <line x1="21" x2="16" y1="20" y2="20" />
+                        <line x1="12" x2="3" y1="20" y2="20" />
+                        <line x1="14" x2="14" y1="2" y2="6" />
+                        <line x1="8" x2="8" y1="10" y2="14" />
+                        <line x1="16" x2="16" y1="18" y2="22" />
+                    </svg>Levé menu (Parametry Modulace)</h3>
+                <p>Nahoře můžete vybrat libovolný <strong>modulační formát</strong> (QAM, PSK, LoRa...). Pod ním
+                    naleznete všechny fyzikální parametry vysílače. <strong>Zkuste najet myší na tyrkysové symboly <span
+                            class="info-icon" style="position:static; margin:0 2px; vertical-align: middle;">?</span>
+                        vedle názvů</strong>, kde ihned zjistíte, co se stane, když parametr posuvníkem změníte!</p>
+            </div>
+
+            <div class="modal-section">
+                <h3 style="display:flex; align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                        height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="tul-icon">
+                        <path d="M3 3v18h18" />
+                        <path d="M7 12v5h12V8l-5 5-4-4Z" />
+                    </svg>Pravá sekce (Grafické panely)</h3>
+                <p>Aplikace okamžitě krokově simuluje signál tak, jak putuje obvody k anténě: od počítačových nul a
+                    jedniček (Graf 1), přes jejich mapování (Graf 2), zpracování frekvenčními filtry do základního pásma
+                    (Graf 3), až po výslednou oscilující nosnou rádiovou vlnu putující z antény 299 792 km/s vesmírem
+                    (Graf 5).</p>
+                <p style="margin-top: 8px;">U každého z grafů můžete kliknout na ikonu <strong>⛶ pro zvětšení
+                        (fullscreen)</strong> zobrazení.</p>
+            </div>
+
+            <div class="modal-section">
+                <h3 style="display:flex; align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                        height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="tul-icon">
+                        <path d="M5 7 3 5" />
+                        <path d="M9 6V3" />
+                        <path d="m13 7 2-2" />
+                        <circle cx="9" cy="13" r="3" />
+                        <path d="M11.83 12H20a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h2.17" />
+                        <path d="M16 16h2" />
+                    </svg>Prezentace a Výuka</h3>
+                <p>Pro promítání třídě je vlevo k dispozici <strong>PRESENTATION MODE</strong>. Aplikace ztlumí prvky na
+                    pozadí a nabere vysokokontrastní neonou paletu, která je na projektorech perfektní pro ukázku i ze
+                    vzdálenějších lavic.</p>
+            </div>
+
+            <button id="close-modal-btn" class="btn"
+                style="width: 100%; margin-top: 20px; padding: 12px; font-weight: bold; background: var(--primary); color: #fff; font-size: 1.1rem; border: none;">Zavřít
+                a začít experimentovat</button>
+        </div>
+    </div>
+
+</body>
+
+</html>
