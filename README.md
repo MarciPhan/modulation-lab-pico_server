@@ -4,46 +4,46 @@
 [![Platform: Raspberry Pi Pico W](https://img.shields.io/badge/Platform-Pico%20W-orange.svg)]()
 [![Type: MicroPython](https://img.shields.io/badge/Stack-MicroPython-yellow.svg)]()
 
-Tato verze projektu **Digital Modulation Lab** je optimalizována pro běh přímo na mikrokontroléru **Raspberry Pi Pico W**. Slouží jako přenosný webový server, který vysílá interaktivní laboratoř přes Wi-Fi Access Point i bez připojení k internetu.
+This version of the **Digital Modulation Lab** project is optimized to run directly on the **Raspberry Pi Pico W** microcontroller. It serves as a portable web server that broadcasts the interactive laboratory over a Wi-Fi Access Point, completely independent of an internet connection.
 
 ---
 
-## Související projekty
+## Connected Projects
 
-Tento projekt existuje ve dvou variantách:
-1. **[Web/Desktop Lab Edition](https://github.com/jakubmarcinka/modulation-lab)** – Plná, vysoce modulární verze s `_internal/src` strukturou pro vývoj a akademickou výuku.
-2. **[Pico W Server Edition](https://github.com/jakubmarcinka/modulation-pico-server)** (tento repozitář) – Odlehčená verze, která servíruje produkční build aplikace přímo z paměti Pico W.
-
----
-
-## Instalace na Pico W
-
-1. **Firmware**: Nahrajte na Pico W přiložený firmware `pico_w_micropython.uf2` (přetažením do BOOTSEL režimu).
-2. **Soubory**: Nahrajte obsah tohoto repozitáře do kořene vašeho Pico W (pomocí Thonny, `mpremote` nebo podobných nástrojů).
-   - `main.py` – Výkonný skript serveru.
-   - `www/` – Složka s webovými assety (produkční build).
-3. **Spuštění**: Po restartu Pico vytvoří Wi-Fi síť s SSID `ModulationLab-AP`. Laboratoř je dostupná na adrese `http://192.168.4.1`.
+This project is available in two variants:
+1. **[Web/Desktop Lab Edition](https://github.com/MarciPhan/modulation-lab)** – Full, highly modular version utilizing the `_internal/src` structure for development and academic teaching.
+2. **[Pico W Server Edition](https://github.com/MarciPhan/modulation-lab-pico_server)** (this repository) – A lightweight version that serves the production build of the application directly from the Pico W's flash memory.
 
 ---
 
-## Optimalizace pro Pico W
+## Installation on Pico W
 
-Tato edice obsahuje několik specifických optimalizací:
-- **Externí Plotly**: Knihovna Plotly je načítána z lokálního souboru `plotly-basic.min.js`, nikoliv z bundlu, což šetří RAM při nahrávání.
-- **Offline Fonts**: Odstraněna závislost na Google Fonts pro provoz v izolovaných sítích.
-- **Gzip support**: Server podporuje servírování `.gz` souborů pro snížení latence (volitelně).
-
----
-
-## Přispívání a vývoj
-
-Pro vývoj nových funkcí nebo úpravu DSP jádra doporučujeme použít **Web/Desktop Lab Edition**, kde je k dispozici plné vývojové prostředí (Vite). Poté stačí provést `npm run build` a přenést soubory do složky `www/`.
+1. **Firmware**: Flash the provided `pico_w_micropython.uf2` firmware onto your Pico W (by dragging and dropping it in BOOTSEL mode).
+2. **Files**: Upload the contents of this repository to the root directory of your Pico W (using Thonny, `mpremote`, or similar tools).
+   - `main.py` – The main server script.
+   - `www/` – Folder containing the web assets (production build).
+3. **Execution**: Upon restart, the Pico will create a Wi-Fi network with the SSID `ModulationLab-AP`. The laboratory is then accessible at `http://192.168.4.1`.
 
 ---
 
-## Licence
+## Pico W Optimizations
 
-Tento projekt je distribuován pod licencí **ISC**.
+This edition incorporates several specific optimizations tailored for microcontrollers:
+- **External Plotly**: The Plotly library is loaded from a local file (`plotly-basic.min.js`) rather than being bundled, which significantly saves RAM during execution.
+- **Offline Fonts**: Dependencies on Google Fonts have been removed to ensure seamless operation in isolated networks.
+- **Gzip Support**: The server supports serving `.gz` compressed files to reduce latency (optional).
+
+---
+
+## Contributing and Development
+
+If you wish to develop new features or modify the DSP engine, we strongly recommend using the **Web/Desktop Lab Edition**, which provides a full development environment (Vite). Afterwards, simply run `npm run build` and transfer the generated files into the `www/` folder of this repository.
+
+---
+
+## License
+
+This project is distributed under the **ISC** License.
 
 ---
 © 2026 Jakub Marcinka | Digital Modulation Lab Project
