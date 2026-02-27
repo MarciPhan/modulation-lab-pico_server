@@ -2,6 +2,19 @@ import network
 import socket
 import os
 import machine
+import binascii
+
+# Sensor setup
+sensor_temp = machine.ADC(4)
+conversion_factor = 3.3 / (65535)
+
+def get_temp():
+    reading = sensor_temp.read_u16() * conversion_factor
+    temperature = 27 - (reading - 0.706)/0.001721
+    return temperature
+
+def get_uid():
+    return binascii.hexlify(machine.unique_id()).decode()
 
 # --- KONFIGURACE WI-FI ---
 SSID_AP = "ModulationLab-AP"
@@ -55,6 +68,14 @@ def serve():
             path = path_full.split('?')[0]
             if path == '/': path = '/index.html'
             
+            if path == "/api/status":
+                cl.send('HTTP/1.1 200 OK\r\n')
+                cl.send('Content-Type: application/json\r\n')
+                cl.send('Connection: close\r\n\r\n')
+                cl.send('{"temp":%.2f,"uid":"%s"}' % (get_temp(), get_uid()))
+                cl.close()
+                continue
+                
             filename = 'www' + path
             gz_filename = filename + '.gz'
             

@@ -33,6 +33,10 @@
                     </div>
                 </div>
                 <small data-i18n="header_status">System Status: SIGNAL LOCK v4.0</small>
+                <div id="pico-live-badge"
+                    style="font-size: 0.75rem; color: var(--primary); font-weight: bold; margin-top: 4px; display: none;">
+                    📡 <span id="pico-temp">--.-</span>°C | ID: <span id="pico-uid">--------</span>
+                </div>
             </div>
 
             <div class="control-group">
@@ -322,6 +326,28 @@
         </div>
     </div>
 
+    <script>
+        // Live hardware status update (robust version)
+        async function updatePicoStats() {
+            try {
+                const r = await fetch('/api/status');
+                if (!r.ok) return;
+                const d = await r.json();
+                const badge = document.getElementById('pico-live-badge');
+                const tEl = document.getElementById('pico-temp');
+                const uEl = document.getElementById('pico-uid');
+
+                if (badge && tEl && uEl) {
+                    tEl.innerText = d.temp.toFixed(1);
+                    uEl.innerText = d.uid.substring(0, 8).toUpperCase();
+                    badge.style.display = 'block';
+                }
+            } catch (e) { console.log("Pico Stats Error:", e); }
+        }
+        // Run once and then every 5s
+        updatePicoStats();
+        setInterval(updatePicoStats, 5000);
+    </script>
 </body>
 
 </html>
