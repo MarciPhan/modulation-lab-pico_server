@@ -35,7 +35,13 @@
                 <small data-i18n="header_status">System Status: SIGNAL LOCK v4.0</small>
                 <div id="pico-live-badge"
                     style="font-size: 0.75rem; color: var(--primary); font-weight: bold; margin-top: 4px; display: none;">
-                    📡 <span id="pico-temp">--.-</span>°C | ID: <span id="pico-uid">--------</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#f05023"
+                        style="vertical-align: middle; margin-right: 2px;">
+                        <path
+                            d="M15.5 13.5c0 3.3-3.5 5.5-3.5 5.5S8.5 16.8 8.5 13.5c0-1.4 1.1-2.5 2.5-2.5 0-1.4 1.1-2.5 2.5-2.5 1.4 0 2.5 1.1 2.5 2.5 0-1.4 1.1-2.5 2.5-2.5 1.4 0 2.5 1.1 2.5 2.5 0 3.3-3.5 5.5-3.5 5.5s-3.5-2.2-3.5-5.5c0-1.4 1.1-2.5 2.5-2.5z" />
+                        <path
+                            d="M12 2c3.3 0 6 2.7 6 6 0 1.4-1.1 2.5-2.5 2.5-1.4 0-2.5-1.1-2.5-2.5 0 1.4-1.1 2.5-2.5 2.5-1.4 0-2.5-1.1-2.5-2.5 0-3.3 2.7-6 6-6z" />
+                    </svg> <span id="pico-temp">--.-</span>°C | UID: <span id="pico-uid">--------</span>
                 </div>
             </div>
 
@@ -166,10 +172,10 @@
 
             <div class="control-group">
                 <button id="show-help-btn" class="btn-main btn-guide">
-                    <span class="emoji">ℹ️</span> <span data-i18n="btn_guide">PRŮVODCE APLIKACÍ</span>
+                    <span data-i18n="btn_guide">PRŮVODCE APLIKACÍ</span>
                 </button>
                 <button id="pres-toggle" class="btn-main btn-pres">
-                    <span class="emoji">📽️</span> <span data-i18n="btn_presentation">PRESENTATION MODE</span>
+                    <span data-i18n="btn_presentation">PRESENTATION MODE</span>
                 </button>
             </div>
 
@@ -347,6 +353,22 @@
         // Run once and then every 5s
         updatePicoStats();
         setInterval(updatePicoStats, 5000);
+
+        // Modal Guide Handler
+        const helpBtn = document.getElementById('show-help-btn');
+        const closeBtn = document.getElementById('close-modal-btn');
+        const modal = document.getElementById('welcome-modal');
+
+        if (helpBtn && modal) {
+            helpBtn.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+            });
+        }
+        if (closeBtn && modal) {
+            closeBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+        }
     </script>
 </body>
 
