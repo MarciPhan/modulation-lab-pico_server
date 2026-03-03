@@ -540,7 +540,7 @@ body.light-theme.presentation {
     --bg-main: #ffffff;
     --bg-panel: #fcfcfc;
     --text-primary: #000000;
-    --border-main: #000000;
+    --border-main: #e0e0e0;
     --primary: #cc5500;
     --primary-hover: #ea7603;
     --info: #0000ff;
@@ -548,6 +548,13 @@ body.light-theme.presentation {
     --plot-grid: rgba(0, 0, 0, 0.2);
     --shadow-main: none;
     --shadow-inset: none;
+}
+
+body.light-theme.presentation .panel-title {
+    background: #f0f0f0;
+    color: #000000;
+    font-weight: bold;
+    border-bottom: 2px solid #000000;
 }
 
 /* Tooltip & Edu-Icons */
@@ -558,20 +565,21 @@ body.light-theme.presentation {
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: var(--primary-trans-20);
-    color: var(--primary);
+    background: rgba(0, 191, 255, 0.15);
+    color: #00d4ff;
+    /* Tyrkysová / Azurová */
     font-size: 10px;
     font-weight: bold;
     margin-left: 5px;
     cursor: help;
-    border: 1px solid transparent;
+    border: 1px solid rgba(0, 191, 255, 0.3);
     transition: 0.2s;
 }
 
 .info-icon:hover {
-    background: var(--primary);
-    color: var(--bg-main);
-    border-color: var(--primary);
+    background: #00d4ff;
+    color: #000;
+    border-color: #00d4ff;
 }
 
 .global-tooltip {
