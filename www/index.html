@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Modulation Lab 2.4+</title>
     <script src="./plotly-basic.min.js"></script>
-    <script type="module" src="./assets/index-J7OFgjiu.js"></script>
-    <link rel="stylesheet" href="./assets/index-USrcme55.css">
+  <script type="module" crossorigin src="./assets/index.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index.css">
 </head>
 
 <body>
@@ -33,16 +33,6 @@
                     </div>
                 </div>
                 <small data-i18n="header_status">System Status: SIGNAL LOCK v4.0</small>
-                <div id="pico-live-badge"
-                    style="font-size: 0.75rem; color: var(--primary); font-weight: bold; margin-top: 4px; display: none;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#f05023"
-                        style="vertical-align: middle; margin-right: 2px;">
-                        <path
-                            d="M15.5 13.5c0 3.3-3.5 5.5-3.5 5.5S8.5 16.8 8.5 13.5c0-1.4 1.1-2.5 2.5-2.5 0-1.4 1.1-2.5 2.5-2.5 1.4 0 2.5 1.1 2.5 2.5 0-1.4 1.1-2.5 2.5-2.5 1.4 0 2.5 1.1 2.5 2.5 0 3.3-3.5 5.5-3.5 5.5s-3.5-2.2-3.5-5.5c0-1.4 1.1-2.5 2.5-2.5z" />
-                        <path
-                            d="M12 2c3.3 0 6 2.7 6 6 0 1.4-1.1 2.5-2.5 2.5-1.4 0-2.5-1.1-2.5-2.5 0 1.4-1.1 2.5-2.5 2.5-1.4 0-2.5-1.1-2.5-2.5 0-3.3 2.7-6 6-6z" />
-                    </svg> <span id="pico-temp">--.-</span>°C | UID: <span id="pico-uid">--------</span>
-                </div>
             </div>
 
             <div class="control-group">
@@ -172,10 +162,10 @@
 
             <div class="control-group">
                 <button id="show-help-btn" class="btn-main btn-guide">
-                    <span data-i18n="btn_guide">PRŮVODCE APLIKACÍ</span>
+                    <span class="emoji">ℹ️</span> <span data-i18n="btn_guide">PRŮVODCE APLIKACÍ</span>
                 </button>
                 <button id="pres-toggle" class="btn-main btn-pres">
-                    <span data-i18n="btn_presentation">PRESENTATION MODE</span>
+                    <span class="emoji">📽️</span> <span data-i18n="btn_presentation">PRESENTATION MODE</span>
                 </button>
             </div>
 
@@ -332,44 +322,6 @@
         </div>
     </div>
 
-    <script>
-        // Live hardware status update (robust version)
-        async function updatePicoStats() {
-            try {
-                const r = await fetch('/api/status');
-                if (!r.ok) return;
-                const d = await r.json();
-                const badge = document.getElementById('pico-live-badge');
-                const tEl = document.getElementById('pico-temp');
-                const uEl = document.getElementById('pico-uid');
-
-                if (badge && tEl && uEl) {
-                    tEl.innerText = d.temp.toFixed(1);
-                    uEl.innerText = d.uid.substring(0, 8).toUpperCase();
-                    badge.style.display = 'block';
-                }
-            } catch (e) { console.log("Pico Stats Error:", e); }
-        }
-        // Run once and then every 5s
-        updatePicoStats();
-        setInterval(updatePicoStats, 5000);
-
-        // Modal Guide Handler
-        const helpBtn = document.getElementById('show-help-btn');
-        const closeBtn = document.getElementById('close-modal-btn');
-        const modal = document.getElementById('welcome-modal');
-
-        if (helpBtn && modal) {
-            helpBtn.addEventListener('click', () => {
-                modal.classList.remove('hidden');
-            });
-        }
-        if (closeBtn && modal) {
-            closeBtn.addEventListener('click', () => {
-                modal.classList.add('hidden');
-            });
-        }
-    </script>
 </body>
 
 </html>
